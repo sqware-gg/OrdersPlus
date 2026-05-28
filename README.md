@@ -1,5 +1,7 @@
 # OrdersPlus
 
+**Get the plugin jar, setup help, and updates in the SQWARE Discord: [discord.sqware.gg](https://discord.sqware.gg).**
+
 OrdersPlus is a Minecraft market plugin for Paper servers. It adds escrow-backed buy orders so players can request items or blocks, pay up front, and let other players fulfill the order for money.
 
 Use it alongside or instead of a normal auction house when your economy needs demand-side trading: buyers post what they want, sellers deliver it.
@@ -70,9 +72,6 @@ mvn package
 
 The jar is written to `target/OrdersPlus-0.1.0.jar`.
 
-## Support
-
-- Website: https://sqware.gg
-- Discord: https://discord.sqware.gg
+## License
 
 OrdersPlus is licensed under the Apache License, Version 2.0.
