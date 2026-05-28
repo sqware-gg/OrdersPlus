@@ -1,0 +1,95 @@
+# OrdersPlus
+config-version: 5
+
+economy:
+  min-price-each: 1.0
+  max-price-each: 1000000000.0
+  max-order-total: 1000000000.0
+  allow-fulfill-own-orders: false
+
+orders:
+  allow-non-stackable-items: false
+  require-plain-items: true
+  default-duration-hours: 72
+  max-duration-hours: 168
+  max-active-per-player: 20
+  max-amount: 3456
+  expire-check-seconds: 60
+  save-interval-seconds: 300
+  blacklisted-materials:
+    - AIR
+    - BEDROCK
+    - BARRIER
+    - COMMAND_BLOCK
+    - CHAIN_COMMAND_BLOCK
+    - REPEATING_COMMAND_BLOCK
+    - STRUCTURE_BLOCK
+    - STRUCTURE_VOID
+    - JIGSAW
+    - DEBUG_STICK
+
+gui:
+  title-browse: "&#2b98fdOrders"
+  title-manage: "&#2b98fdYour Orders"
+  title-confirm: "&#2b98fdFulfil Order"
+  title-materials: "&#2b98fdItem Search"
+
+messages:
+  prefix: "&#2b98fdOrders+ &8> &7"
+  no-permission: "&#ED4245You do not have permission to do that."
+  players-only: "&#ED4245Only players can use that."
+  economy-unavailable: "&#ED4245No Vault economy provider is available."
+  storage-failed: "&#ED4245Order storage failed. No trade was completed."
+  invalid-material: "&#ED4245Choose a valid item or block. Use &f/orders items &#ED4245to search."
+  blacklisted-material: "&#ED4245That item cannot be ordered."
+  non-stackable-material: "&#ED4245Orders use material counts, so non-stackable items are disabled by default."
+  invalid-price: "&#ED4245Enter a price between &f{min} &#ED4245and &f{max}&#ED4245."
+  invalid-amount: "&#ED4245Enter an amount from &f1 &#ED4245to &f{max}&#ED4245."
+  invalid-duration: "&#ED4245Use a duration like &f30m&#ED4245, &f2h&#ED4245, or &f3d&#ED4245."
+  order-total-too-high: "&#ED4245The order total cannot exceed &f{max_total}&#ED4245."
+  order-limit: "&#ED4245You already have &f{limit} &#ED4245active orders."
+  not-enough-money: "&#ED4245You need &f{price} &#ED4245to create that order."
+  transaction-failed: "&#ED4245Economy transaction failed: &f{reason}"
+  order-created: "&7Created order &f#{id}&7: &f{amount}x {material}&7 at &#2b98fd{price_each}&7 each. Escrow: &f{total}&7."
+  order-not-found: "&#ED4245That order no longer exists."
+  order-unavailable: "&#ED4245That order is no longer active."
+  order-expired: "&#ED4245That order has expired."
+  cannot-fulfill-own: "&#ED4245You cannot fulfil your own order."
+  no-matching-items: "&#ED4245You do not have any &f{material} &#ED4245to fulfil this order."
+  no-plain-items: "&#ED4245You need plain &f{material} &#ED4245with no custom data to fulfil this order."
+  fulfill-complete: "&7Fulfilled &f{amount}x {material}&7 for &#2b98fd{payout}&7."
+  order-filled-buyer: "&f{player}&7 fulfilled your order for &f{amount}x {material}&7. Use &f/orders claim {id}&7."
+  claim-denied: "&#ED4245You can only claim items from your own orders."
+  claim-empty: "&#ED4245There are no fulfilled items waiting to claim."
+  claim-complete: "&7Claimed &f{amount}x {material}&7 from order &f#{id}&7."
+  claim-all-complete: "&7Claimed &f{amount} &#57F287items&7 from &f{orders} &#57F287orders&7."
+  inventory-full: "&#ED4245Your inventory does not have room for &f{material}&#ED4245."
+  cancel-denied: "&#ED4245You can only cancel your own active orders."
+  cancel-complete: "&7Cancelled order &f#{id}&7 and refunded &f{refund}&7."
+  order-expired-refund: "&7Order &f#{id}&7 expired. Refunded &f{refund}&7."
+  saved: "&7Order data saved."
+  reloaded: "&7Orders+ reloaded."
+  status: "&7Orders: &f{active}&7 active, &f{total}&7 total. Economy: &f{economy}&7."
+  material-hint: "&7Use &f/orders create {material} <amount> <price-each>&7."
+  search-sign-opened: "&7Type an item name on the first line."
+  search-empty: "&#ED4245No search entered."
+  usage-create: "&7Use &#2b98fd/orders create <material> <amount> <price-each> [duration]&7. Example: &f/orders create diamond 64 100 2d"
+  usage-fulfill: "&7Use &#2b98fd/orders fulfill <id> [amount]&7, or click an order in &f/orders&7."
+  usage-claim: "&7Use &#2b98fd/orders claim [id|all] [amount]&7, or left-click your order in &f/orders manage&7."
+  usage-cancel: "&7Use &#2b98fd/orders cancel <id>&7, or open &f/orders manage&7."
+  usage-search: "&7Use &#2b98fd/orders search <text>&7 or &f/orders items&7."
+  help: |-
+    &fOrders+ Commands
+    &#2b98fd/orders &8- &7Browse active orders
+    &#2b98fd/orders search <text> &8- &7Find orders by item, buyer, or ID
+    &#2b98fd/orders items &8- &7Search item names with a sign
+    &#2b98fd/orders create <material> <amount> <price-each> [duration] &8- &7Create an escrowed buy order
+    &#2b98fd/orders fulfill <id> [amount] &8- &7Fulfil an order with items from your inventory
+    &#2b98fd/orders claim [id|all] [amount] &8- &7Collect fulfilled items
+    &#2b98fd/orders manage &8- &7Manage your orders
+  usage-admin: |-
+    &fOrders+ Admin Commands
+    &#2b98fd/ordersplus stats &8- &7Show storage and economy status
+    &#2b98fd/ordersplus reload &8- &7Reload config
+    &#2b98fd/ordersplus save &8- &7Save order data
+    &#2b98fd/ordersplus cancel <id> &8- &7Cancel and refund an order

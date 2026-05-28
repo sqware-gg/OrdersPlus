@@ -1,0 +1,50 @@
+name: OrdersPlus
+version: 0.1.0
+main: dev.ordersplus.OrdersPlusPlugin
+api-version: '26.1.2'
+author: SQWARE / Conflict
+website: https://sqware.gg
+description: Escrow-backed item and block orders for Paper servers.
+depend:
+  - Vault
+commands:
+  orders:
+    description: Browse, create, manage, and fulfil Orders+ orders.
+    usage: /orders [search|items|create|fulfill|claim|manage|cancel|help]
+    aliases:
+      - order
+      - market
+  ordersplus:
+    description: Manage Orders+.
+    usage: /ordersplus [stats|reload|save|cancel]
+    aliases:
+      - ordersadmin
+permissions:
+  ordersplus.use:
+    description: Allows browsing orders.
+    default: true
+  ordersplus.create:
+    description: Allows creating orders.
+    default: true
+  ordersplus.fulfill:
+    description: Allows fulfilling orders.
+    default: true
+  ordersplus.cancel:
+    description: Allows cancelling your own active orders.
+    default: true
+  ordersplus.search:
+    description: Allows searching orders and materials.
+    default: true
+  ordersplus.limit.bypass:
+    description: Bypasses the configured active order limit.
+    default: op
+  ordersplus.admin:
+    description: Allows administrative Orders+ commands.
+    default: op
+    children:
+      ordersplus.use: true
+      ordersplus.create: true
+      ordersplus.fulfill: true
+      ordersplus.cancel: true
+      ordersplus.search: true
+      ordersplus.limit.bypass: true
