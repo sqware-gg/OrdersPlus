@@ -29,6 +29,11 @@ permissions:
   ordersplus.fulfill:
     description: Allows fulfilling orders.
     default: true
+    children:
+      ordersplus.announce.receive: true
+  ordersplus.announce.receive:
+    description: Allows receiving OrdersPlus order creation announcements when configured.
+    default: true
   ordersplus.cancel:
     description: Allows cancelling your own active orders.
     default: true
@@ -45,6 +50,7 @@ permissions:
       ordersplus.use: true
       ordersplus.create: true
       ordersplus.fulfill: true
+      ordersplus.announce.receive: true
       ordersplus.cancel: true
       ordersplus.search: true
       ordersplus.limit.bypass: true

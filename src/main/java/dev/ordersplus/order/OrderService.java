@@ -15,10 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -138,14 +140,17 @@ public final class OrderService {
                 order.createdAtMillis(),
                 order.expiresAtMillis()
         ));
-        return OrderActionResult.success("order-created", Map.of(
+        Map<String, String> placeholders = Map.of(
                 "id", Long.toString(order.id()),
+                "buyer", buyer.getName(),
                 "amount", Integer.toString(amount),
                 "material", MaterialNames.display(material),
                 "price_each", economy.format(priceEach),
                 "total", economy.format(total),
                 "duration", DurationFormatter.compact(duration)
-        ));
+        );
+        announceOrderCreated(order, buyer, placeholders);
+        return OrderActionResult.success("order-created", placeholders);
     }
 
     public synchronized OrderActionResult fulfill(long orderId, Player fulfiller, int requestedAmount) {
@@ -491,6 +496,49 @@ public final class OrderService {
     }
 
     private record ClaimResult(int claimedAmount, boolean inventoryFull, boolean storageFailed) {
+    }
+
+    private void announceOrderCreated(Order order, Player buyer, Map<String, String> placeholders) {
+        if (!config.orderCreatedAnnouncementEnabled()) {
+            return;
+        }
+        String command = Text.render(config.orderCreatedAnnouncementClickCommand(), placeholders);
+        Map<String, String> renderedPlaceholders = new java.util.HashMap<>(placeholders);
+        renderedPlaceholders.put("command", command);
+
+        Component message = Text.component(Text.render(config.orderCreatedAnnouncementFormat(), renderedPlaceholders));
+        String hover = Text.render(config.orderCreatedAnnouncementHover(), renderedPlaceholders);
+        if (!hover.isBlank()) {
+            message = message.hoverEvent(HoverEvent.showText(Text.component(hover)));
+        }
+        message = applyClick(message, config.orderCreatedAnnouncementClickAction(), command);
+
+        String recipientPermission = config.orderCreatedAnnouncementRecipientPermission();
+        if (recipientPermission == null) {
+            recipientPermission = "";
+        }
+        recipientPermission = recipientPermission.trim();
+        for (Player recipient : Bukkit.getOnlinePlayers()) {
+            if (!config.orderCreatedAnnouncementIncludeBuyer()
+                    && recipient.getUniqueId().equals(order.buyerUuid())) {
+                continue;
+            }
+            if (!recipientPermission.isBlank() && !recipient.hasPermission(recipientPermission)) {
+                continue;
+            }
+            recipient.sendMessage(message);
+        }
+    }
+
+    private Component applyClick(Component message, String action, String command) {
+        if (command == null || command.isBlank() || action == null) {
+            return message;
+        }
+        return switch (action.trim().toLowerCase(java.util.Locale.ROOT)) {
+            case "run", "run-command", "run_command" -> message.clickEvent(ClickEvent.runCommand(command));
+            case "none", "off", "disabled" -> message;
+            default -> message.clickEvent(ClickEvent.suggestCommand(command));
+        };
     }
 
     private void send(Player player, String messageKey, Map<String, String> placeholders) {

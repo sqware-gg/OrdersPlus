@@ -1,5 +1,5 @@
 # OrdersPlus
-config-version: 5
+config-version: 6
 
 economy:
   min-price-each: 1.0
@@ -27,6 +27,20 @@ orders:
     - STRUCTURE_VOID
     - JIGSAW
     - DEBUG_STICK
+
+announcements:
+  order-created:
+    # Sends an in-game chat announcement when a new buy order is created.
+    enabled: true
+    # The creator already receives messages.order-created, so skip them by default.
+    include-buyer: false
+    # Empty means every online player. ordersplus.fulfill grants this by default.
+    recipient-permission: "ordersplus.announce.receive"
+    # none, suggest, or run. Suggest is safest because players can add an amount.
+    click-action: "suggest"
+    click-command: "/orders fulfill {id}"
+    format: "&#2b98fdOrders &8> &f{buyer} &7created order &f#{id}&7: &f{amount}x {material}&7 at &#57F287{price_each}&7 each."
+    hover: "&7Click to fulfil order &f#{id}&7.\n&7Total escrow: &f{total}&7.\n&7Expires in: &f{duration}&7."
 
 gui:
   title-browse: "&#2b98fdOrders"

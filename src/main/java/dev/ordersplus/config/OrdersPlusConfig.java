@@ -89,6 +89,36 @@ public final class OrdersPlusConfig {
         return blacklistedMaterials.contains(material);
     }
 
+    public boolean orderCreatedAnnouncementEnabled() {
+        return config.getBoolean("announcements.order-created.enabled", true);
+    }
+
+    public boolean orderCreatedAnnouncementIncludeBuyer() {
+        return config.getBoolean("announcements.order-created.include-buyer", false);
+    }
+
+    public String orderCreatedAnnouncementRecipientPermission() {
+        return config.getString("announcements.order-created.recipient-permission", "ordersplus.announce.receive");
+    }
+
+    public String orderCreatedAnnouncementClickAction() {
+        return config.getString("announcements.order-created.click-action", "suggest");
+    }
+
+    public String orderCreatedAnnouncementClickCommand() {
+        return config.getString("announcements.order-created.click-command", "/orders fulfill {id}");
+    }
+
+    public String orderCreatedAnnouncementFormat() {
+        return config.getString("announcements.order-created.format",
+                "&#2b98fdOrders &8> &f{buyer} &7created order &f#{id}&7: &f{amount}x {material}&7 at &#57F287{price_each}&7 each.");
+    }
+
+    public String orderCreatedAnnouncementHover() {
+        return config.getString("announcements.order-created.hover",
+                "&7Click to fulfil order &f#{id}&7.\n&7Total escrow: &f{total}&7.\n&7Expires in: &f{duration}&7.");
+    }
+
     public String guiTitle(String key) {
         return config.getString("gui." + key.toLowerCase(Locale.ROOT), "");
     }
