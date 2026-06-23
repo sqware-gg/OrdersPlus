@@ -1,5 +1,5 @@
 # OrdersPlus
-config-version: 6
+config-version: 7
 
 economy:
   min-price-each: 1.0
@@ -13,6 +13,11 @@ orders:
   default-duration-hours: 72
   max-duration-hours: 168
   max-active-per-player: 20
+  # Optional LuckPerms rank/group limits. The highest matching limit wins and never lowers max-active-per-player.
+  # Keys should match LuckPerms primary group/group names, lower-case.
+  rank-limits:
+    # vip: 30
+    # mvp: 40
   max-amount: 3456
   expire-check-seconds: 60
   save-interval-seconds: 300
@@ -95,12 +100,15 @@ messages:
   help: |-
     &fOrders+ Commands
     &#2b98fd/orders &8- &7Browse active orders
+    &#2b98fd/orders list [search] [page] &8- &7List active orders in chat
     &#2b98fd/orders search <text> &8- &7Find orders by item, buyer, or ID
     &#2b98fd/orders items &8- &7Search item names with a sign
+    &#2b98fd/orders items list [text] &8- &7List item material IDs in chat
     &#2b98fd/orders create <material> <amount> <price-each> [duration] &8- &7Create an escrowed buy order
     &#2b98fd/orders fulfill <id> [amount] &8- &7Fulfil an order with items from your inventory
     &#2b98fd/orders claim [id|all] [amount] &8- &7Collect fulfilled items
     &#2b98fd/orders manage &8- &7Manage your orders
+    &#2b98fd/orders manage list [page] &8- &7List your orders in chat
   usage-admin: |-
     &fOrders+ Admin Commands
     &#2b98fd/ordersplus stats &8- &7Show storage and economy status

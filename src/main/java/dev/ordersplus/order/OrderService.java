@@ -6,6 +6,7 @@ import dev.ordersplus.api.event.OrderExpiredEvent;
 import dev.ordersplus.api.event.OrderFulfilledEvent;
 import dev.ordersplus.config.OrdersPlusConfig;
 import dev.ordersplus.economy.EconomyService;
+import dev.ordersplus.permission.PermissionService;
 import dev.ordersplus.util.DurationFormatter;
 import dev.ordersplus.util.InventoryUtil;
 import dev.ordersplus.util.MaterialNames;
@@ -30,14 +31,17 @@ public final class OrderService {
     private final OrdersPlusConfig config;
     private final OrderStore store;
     private final EconomyService economy;
+    private final PermissionService permissions;
     private BukkitTask expireTask;
     private BukkitTask saveTask;
 
-    public OrderService(JavaPlugin plugin, OrdersPlusConfig config, OrderStore store, EconomyService economy) {
+    public OrderService(JavaPlugin plugin, OrdersPlusConfig config, OrderStore store, EconomyService economy,
+                        PermissionService permissions) {
         this.plugin = plugin;
         this.config = config;
         this.store = store;
         this.economy = economy;
+        this.permissions = permissions;
     }
 
     public void start() {
@@ -60,6 +64,7 @@ public final class OrderService {
     public void reload() {
         config.reload();
         economy.refresh();
+        permissions.refresh();
         if (expireTask != null) {
             expireTask.cancel();
         }
@@ -96,9 +101,11 @@ public final class OrderService {
                     "max", config.maxPriceEach() <= 0.0D ? "unlimited" : economy.format(config.maxPriceEach())
             ));
         }
-        if (!buyer.hasPermission("ordersplus.limit.bypass")
-                && activeOrders(buyer.getUniqueId()).size() >= config.maxActivePerPlayer()) {
-            return OrderActionResult.failure("order-limit", Map.of("limit", Integer.toString(config.maxActivePerPlayer())));
+        if (!buyer.hasPermission("ordersplus.limit.bypass")) {
+            int activeLimit = activeLimit(buyer);
+            if (activeOrders(buyer.getUniqueId()).size() >= activeLimit) {
+                return OrderActionResult.failure("order-limit", Map.of("limit", Integer.toString(activeLimit)));
+            }
         }
 
         double total = amount * priceEach;
@@ -459,6 +466,17 @@ public final class OrderService {
             return false;
         }
         return config.maxPriceEach() <= 0.0D || price <= config.maxPriceEach();
+    }
+
+    private int activeLimit(Player player) {
+        int limit = config.maxActivePerPlayer();
+        for (String rank : permissions.rankNames(player)) {
+            Integer rankLimit = config.activeLimitByRank().get(rank);
+            if (rankLimit != null) {
+                limit = Math.max(limit, rankLimit);
+            }
+        }
+        return limit;
     }
 
     private long safeExpiresAt(long now, long duration) {

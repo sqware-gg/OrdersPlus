@@ -11,6 +11,7 @@ import dev.ordersplus.gui.OrdersGui;
 import dev.ordersplus.gui.OrdersMenuListener;
 import dev.ordersplus.order.OrderService;
 import dev.ordersplus.order.OrderStore;
+import dev.ordersplus.permission.PermissionService;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,6 +22,7 @@ public final class OrdersPlusPlugin extends JavaPlugin {
     private OrdersPlusConfig ordersConfig;
     private OrderStore orderStore;
     private EconomyService economyService;
+    private PermissionService permissionService;
     private OrderService orderService;
     private OrdersGui ordersGui;
     private MaterialSearchPrompt materialSearchPrompt;
@@ -33,7 +35,8 @@ public final class OrdersPlusPlugin extends JavaPlugin {
         ordersConfig = new OrdersPlusConfig(this);
         orderStore = new OrderStore(this);
         economyService = new EconomyService(this);
-        orderService = new OrderService(this, ordersConfig, orderStore, economyService);
+        permissionService = new PermissionService(this);
+        orderService = new OrderService(this, ordersConfig, orderStore, economyService, permissionService);
         ordersGui = new OrdersGui(orderService);
         materialSearchPrompt = new MaterialSearchPrompt(this, orderService, ordersGui);
         OrdersPlusApi.register(orderService);

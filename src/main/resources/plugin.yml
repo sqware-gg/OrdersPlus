@@ -1,16 +1,18 @@
 name: OrdersPlus
 version: 0.1.0
 main: dev.ordersplus.OrdersPlusPlugin
-api-version: '26.1.2'
+api-version: '26.2'
 author: SQWARE / Conflict
 website: https://sqware.gg
 description: Escrow-backed item and block orders for Paper servers.
 depend:
   - Vault
+softdepend:
+  - LuckPerms
 commands:
   orders:
     description: Browse, create, manage, and fulfil Orders+ orders.
-    usage: /orders [search|items|create|fulfill|claim|manage|cancel|help]
+    usage: /orders [list|search|items|create|fulfill|claim|manage|cancel|help]
     aliases:
       - order
       - market

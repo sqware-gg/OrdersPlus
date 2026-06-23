@@ -16,17 +16,18 @@ Use it alongside or instead of a normal auction house when your economy needs de
 - Order search and material lookup.
 - Clickable in-game announcements when new orders are created.
 - Active order limits with bypass permission.
+- LuckPerms/Vault rank-based active order limit increases.
 - Plain-item validation by default to avoid unsafe custom item trades.
 - API events for creation, fulfillment, cancellation, and expiry.
 - DiscordPlus integration for order listings and order events.
 
 ## Requirements
 
-- Paper `26.1.2+`
+- Paper `26.2+`
 - Java `25+`
 - Vault
 - A Vault-compatible economy plugin
-- Maven
+- Maven wrapper included
 
 ## Commands
 
@@ -75,7 +76,7 @@ Configure this under `announcements.order-created` in `config.yml`, including re
 ## Build
 
 ```powershell
-mvn package
+.\mvnw.cmd package
 ```
 
 The jar is written to `target/OrdersPlus-0.1.0.jar`.

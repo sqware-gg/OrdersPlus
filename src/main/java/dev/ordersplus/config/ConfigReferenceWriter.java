@@ -8,7 +8,7 @@ import java.util.Arrays;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ConfigReferenceWriter {
-    private static final int CURRENT_CONFIG_VERSION = 6;
+    private static final int CURRENT_CONFIG_VERSION = 7;
 
     private ConfigReferenceWriter() {
     }
